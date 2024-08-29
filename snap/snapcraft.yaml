@@ -1,0 +1,32 @@
+name: hauk
+base: core24
+version: '1.6.2'
+summary: Open-source realtime location sharing
+description: |
+  Hauk is a fully open source, self-hosted location sharing service.
+
+grade: devel
+confinement: strict
+
+parts:
+  hauk:
+    plugin: nil
+    build-packages:
+      - wget
+      - tar
+    override-build: |
+      wget https://github.com/bilde2910/Hauk/archive/refs/tags/v1.6.2.tar.gz
+      tar -xf v1.6.2.tar.gz
+      mkdir html
+      cp -a Hauk-$SNAPCRAFT_PROJECT_VERSION/frontend/. html/
+      cp -a Hauk-$SNAPCRAFT_PROJECT_VERSION/backend-php/. html/
+      ls -lh html/
+    stage-packages:
+      - nginx
+      - memcached
+      - php-fpm
+      - php-memcached
+      - php-ldap
+    override-prime: |
+      craftctl default
+      cp -r $CRAFT_PART_BUILD/html .
