@@ -15,8 +15,8 @@ parts:
       - wget
       - tar
     override-build: |
-      wget https://github.com/bilde2910/Hauk/archive/refs/tags/v1.6.2.tar.gz
-      tar -xf v1.6.2.tar.gz
+      wget https://github.com/bilde2910/Hauk/archive/refs/tags/v$SNAPCRAFT_PROJECT_VERSION.tar.gz
+      tar -xf v$SNAPCRAFT_PROJECT_VERSION.tar.gz
       mkdir html
       cp -a Hauk-$SNAPCRAFT_PROJECT_VERSION/frontend/. html/
       cp -a Hauk-$SNAPCRAFT_PROJECT_VERSION/backend-php/. html/
