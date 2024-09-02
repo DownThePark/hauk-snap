@@ -9,7 +9,7 @@ grade: devel
 confinement: strict
 
 parts:
-  hauk:
+  html:
     plugin: nil
     build-packages:
       - wget
@@ -20,13 +20,14 @@ parts:
       mkdir html
       cp -a Hauk-$SNAPCRAFT_PROJECT_VERSION/frontend/. html/
       cp -a Hauk-$SNAPCRAFT_PROJECT_VERSION/backend-php/. html/
-      ls -lh html/
+    override-prime: |
+      craftctl default
+      cp -r $CRAFT_PART_BUILD/html .
+  server:
+    plugin: nil
     stage-packages:
       - nginx
       - memcached
       - php-fpm
       - php-memcached
       - php-ldap
-    override-prime: |
-      craftctl default
-      cp -r $CRAFT_PART_BUILD/html .
