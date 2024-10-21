@@ -1,5 +1,5 @@
 #!/bin/bash
 
 # Placeholder
-echo "Starting NGINX Service..."
+echo "Starting NGINX service..."
 

@@ -8,6 +8,11 @@ description: |
 grade: devel
 confinement: strict
 
+hooks:
+  install:
+    command-chain:
+      - snap/command-chain/install.sh
+
 parts:
   server:
     plugin: nil
