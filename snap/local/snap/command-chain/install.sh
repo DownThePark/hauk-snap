@@ -4,6 +4,7 @@
 initialize_snap_data() {
   # Configuration
   mkdir $SNAP_DATA/etc
+  cp $SNAP/etc/config.php $SNAP_DATA/etc/
 
   # Logs
   mkdir $SNAP_DATA/log

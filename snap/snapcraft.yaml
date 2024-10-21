@@ -37,9 +37,14 @@ parts:
       craftctl default
       cp -r $CRAFT_PART_BUILD/html .
   local:
+    after: [html]
     plugin: dump
     source-type: local
     source: snap/local
+    override-prime: |
+      craftctl default
+      rm html/include/inc.php
+      mv etc/inc.php html/include/inc.php
 
 apps:
   nginx:
