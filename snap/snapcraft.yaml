@@ -9,6 +9,14 @@ grade: devel
 confinement: strict
 
 parts:
+  server:
+    plugin: nil
+    stage-packages:
+      - nginx
+      - memcached
+      - php-fpm
+      - php-memcached
+      - php-ldap
   html:
     plugin: nil
     build-packages:
@@ -23,11 +31,21 @@ parts:
     override-prime: |
       craftctl default
       cp -r $CRAFT_PART_BUILD/html .
-  server:
-    plugin: nil
-    stage-packages:
-      - nginx
-      - memcached
-      - php-fpm
-      - php-memcached
-      - php-ldap
+  local:
+    plugin: dump
+    source-type: local
+    source: snap/local
+
+apps:
+  nginx:
+    command: bin/nginx.sh
+    daemon: simple
+    plugs: [network, network-bind]
+  php-fpm:
+    command: bin/php-fpm.sh
+    daemon: simple
+    plugs: [network, network-bind]
+  memcached:
+    command: bin/memcached.sh
+    daemon: simple
+    plugs: [network, network-bind]
