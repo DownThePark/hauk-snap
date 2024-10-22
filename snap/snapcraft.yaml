@@ -43,8 +43,8 @@ parts:
     source: snap/local
     override-prime: |
       craftctl default
-      rm html/include/inc.php
-      mv etc/inc.php html/include/inc.php
+      patch html/include/inc.php patch/inc.php.patch
+      patch html/include/config-sample.php patch/config-sample.php.patch
 
 apps:
   nginx:

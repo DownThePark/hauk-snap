@@ -1,0 +1,37 @@
+--- inc.php.orig	2024-10-22 19:02:00.594980607 -0400
++++ inc.php.modified	2024-10-22 19:01:08.645708261 -0400
+@@ -111,8 +111,8 @@
+     // options in config.php.
+ 
+     "storage_backend"       => MEMCACHED,
+-    "memcached_host"        => 'localhost',
+-    "memcached_port"        => 11211,
++    "memcached_host"        => 'unix:///var/snap/hauk/current/run/memcached.sock',
++    "memcached_port"        => 0,
+     "memcached_binary"      => false,
+     "memcached_use_sasl"    => false,
+     "memcached_sasl_user"   => "",
+@@ -125,7 +125,7 @@
+     "redis_prefix"          => 'hauk',
+     "auth_method"           => PASSWORD,
+     "password_hash"         => '$2y$10$4ZP1iY8A3dZygXoPgsXYV.S3gHzBbiT9nSfONjhWrvMxVPkcFq1Ka',
+-    "htpasswd_path"         => '/etc/hauk/users.htpasswd',
++    "htpasswd_path"         => '/var/snap/hauk/current/etc/users.htpasswd',
+     "ldap_uri"              => 'ldaps://ldap.example.com:636',
+     "ldap_start_tls"        => false,
+     "ldap_base_dn"          => 'ou=People,dc=example,dc=com',
+@@ -153,12 +153,11 @@
+ 
+ );
+ 
+-// Configuration can be stored either in /etc/hauk/config.php (e.g. Docker
++// Configuration can be stored either in /var/snap/hauk/current/etc/config.php (e.g. Docker
+ // installations) or relative to this file as config.php. Only include the first
+ // one found from this list.
+ const CONFIG_PATHS = array(
+-    "/etc/hauk/config.php",
+-    "/usr/local/etc/hauk/config.php",
++    "/var/snap/hauk/current/etc/config.php",
+     __DIR__."/config.php"
+ );
+ 
