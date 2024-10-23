@@ -11,6 +11,15 @@ initialize_snap_data() {
 
   # Sockets
   mkdir $SNAP_DATA/run
+
+  # NGINX data
+  mkdir -p $SNAP_DATA/var/lib/nginx
+
+  # Set permissions
+  chown -R snap_daemon:snap_daemon $SNAP_DATA/etc
+  chown -R snap_daemon:snap_daemon $SNAP_DATA/log
+  chown -R snap_daemon:snap_daemon $SNAP_DATA/run
+  chown -R snap_daemon:snap_daemon $SNAP_DATA/var/lib/nginx
 }
 
 initialize_snap_data

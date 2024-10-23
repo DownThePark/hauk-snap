@@ -1,5 +1,6 @@
 #!/bin/bash
 
 # Placeholder
-echo "Starting NGINX service..."
+#echo "Starting NGINX..."
 
+$SNAP/bin/setpriv.sh $SNAP/usr/sbin/nginx -c $SNAP/etc/nginx/nginx.conf

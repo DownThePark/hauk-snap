@@ -8,6 +8,13 @@ description: |
 grade: devel
 confinement: strict
 
+system-usernames:
+  snap_daemon: shared
+
+layout:
+  /var/lib/nginx:
+    bind: $SNAP_DATA/var/lib/nginx
+
 hooks:
   install:
     command-chain:
@@ -37,7 +44,7 @@ parts:
       craftctl default
       cp -r $CRAFT_PART_BUILD/html .
   local:
-    after: [html]
+    after: [server, html]
     plugin: dump
     source-type: local
     source: snap/local
@@ -45,11 +52,19 @@ parts:
       craftctl default
       patch html/include/inc.php patch/inc.php.patch
       patch html/include/config-sample.php patch/config-sample.php.patch
+      patch etc/nginx/nginx.conf patch/nginx.conf.patch
+  setpriv:
+    after: [local]
+    plugin: nil
+    build-packages:
+      - util-linux
+    override-prime: |
+      cp /usr/bin/setpriv bin/
 
 apps:
   nginx:
     command: bin/nginx.sh
-    daemon: simple
+    daemon: forking
     plugs: [network, network-bind]
   php-fpm:
     command: bin/php-fpm.sh
