@@ -12,8 +12,22 @@ system-usernames:
   snap_daemon: shared
 
 layout:
-  /var/lib/nginx:
-    bind: $SNAP_DATA/var/lib/nginx
+  /usr/sbin/apache2:
+    symlink: $SNAP/usr/sbin/apache2
+  /etc/apache2:
+    symlink: $SNAP/etc/apache2
+  /usr/lib/apache2:
+    symlink: $SNAP/usr/lib/apache2
+  /var/www/html:
+    bind: $SNAP/html
+
+environment:
+  APACHE_RUN_USER: snap_daemon
+  APACHE_RUN_GROUP: snap_daemon
+  APACHE_PID_FILE: /var/snap/hauk/current/run/apache2.pid
+  APACHE_RUN_DIR: /var/snap/hauk/current/run
+  APACHE_LOCK_DIR: /var/snap/hauk/current/lock
+  APACHE_LOG_DIR: /var/snap/hauk/current/log
 
 hooks:
   install:
@@ -23,12 +37,18 @@ hooks:
 parts:
   server:
     plugin: nil
+    build-packages:
+      - apache2
     stage-packages:
-      - nginx
+      - apache2
+      - php8.3
+      - php8.3-memcached
+      - php8.3-ldap
       - memcached
-      - php-fpm
-      - php-memcached
-      - php-ldap
+    override-prime: |
+      craftctl default
+      cp -a /etc/apache2/mods-enabled/. etc/apache2/mods-enabled/
+      cp etc/apache2/sites-available/000-default.conf etc/apache2/sites-enabled/
   html:
     plugin: nil
     build-packages:
@@ -52,7 +72,9 @@ parts:
       craftctl default
       patch html/include/inc.php patch/inc.php.patch
       patch html/include/config-sample.php patch/config-sample.php.patch
-      patch etc/nginx/nginx.conf patch/nginx.conf.patch
+      patch etc/apache2/envvars patch/envvars.patch
+      patch etc/apache2/ports.conf patch/ports.conf.patch
+      patch etc/apache2/sites-enabled/000-default.conf patch/000-default.conf.patch
   setpriv:
     after: [local]
     plugin: nil
@@ -62,13 +84,9 @@ parts:
       cp /usr/bin/setpriv bin/
 
 apps:
-  nginx:
-    command: bin/nginx.sh
+  apache2:
+    command: bin/apache2.sh
     daemon: forking
-    plugs: [network, network-bind]
-  php-fpm:
-    command: bin/php-fpm.sh
-    daemon: simple
     plugs: [network, network-bind]
   memcached:
     command: bin/memcached.sh

@@ -1,0 +1,8 @@
+--- squashfs-root/etc/apache2/sites-available/000-default.conf	2024-03-18 08:35:36.000000000 -0400
++++ 000-default.conf	2024-10-24 13:17:09.312708429 -0400
+@@ -1,4 +1,4 @@
+-<VirtualHost *:80>
++<VirtualHost *:8000>
+ 	# The ServerName directive sets the request scheme, hostname and port that
+ 	# the server uses to identify itself. This is used when creating
+ 	# redirection URLs. In the context of virtual hosts, the ServerName

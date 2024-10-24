@@ -1,0 +1,11 @@
+--- /etc/apache2/ports.conf     2024-03-18 08:35:36.000000000 -0400
++++ /home/wasi/ports.conf.modified      2024-10-24 12:59:38.156278156 -0400
+@@ -2,7 +2,7 @@
+ # have to change the VirtualHost statement in
+ # /etc/apache2/sites-enabled/000-default.conf
+
+-Listen 80
++Listen 8000
+
+ <IfModule ssl_module>
+        Listen 443
