@@ -70,12 +70,10 @@ parts:
       - memcached
     override-prime: |
       craftctl default
-      cp -a /etc/apache2/. etc/apache2/
-      cp -a /etc/php/. etc/php/
-      rm etc/apache2/sites-enabled/000-default.conf
-      rm etc/apache2/ports.conf
-      ln -s /var/apache2/etc/ports.conf etc/apache2/ports.conf
-      ln -s /var/apache2/etc/000-default.conf etc/apache2/sites-enabled/000-default.conf
+      cp --remove-destination -a /etc/apache2/. etc/apache2/
+      cp --remove-destination -a /etc/php/. etc/php/
+      ln -sf /var/apache2/etc/ports.conf etc/apache2/ports.conf
+      ln -sf /var/apache2/etc/000-default.conf etc/apache2/sites-enabled/000-default.conf
   html:
     plugin: nil
     build-packages:
