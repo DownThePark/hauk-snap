@@ -73,9 +73,7 @@ parts:
       cp -a /etc/apache2/. etc/apache2/
       cp -a /etc/php/. etc/php/
       rm etc/apache2/sites-enabled/000-default.conf
-      mkdir -p /var/apache2/etc
-      mv etc/apache2/ports.conf /var/apache2/etc
-      mv etc/apache2/sites-available/000-default.conf /var/apache2/etc
+      rm etc/apache2/ports.conf
       ln -s /var/apache2/etc/ports.conf etc/apache2/ports.conf
       ln -s /var/apache2/etc/000-default.conf etc/apache2/sites-enabled/000-default.conf
   html:
