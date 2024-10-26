@@ -26,9 +26,6 @@ layout:
   /var/www/html:
     symlink: $SNAP/html
 
-system-usernames:
-  snap_daemon: shared
-
 hooks:
   install:
     command-chain:
