@@ -19,12 +19,10 @@ if ! expr "$HTTP_PORT" : '^[0-9]\+$' > /dev/null ; then
   exit 1
 fi
 
+export HTTP_PORT=$HTTP_PORT
+
 if [ ! -d /var/apache2 ] ; then
   mkdir /var/apache2
-fi
-
-if [ ! -d /var/apache2/etc ] ; then
-  mkdir /var/apache2/etc
 fi
 
 if [ ! -d /var/apache2/run ] ; then
@@ -38,11 +36,5 @@ fi
 if [ ! -d /var/apache2/log ] ; then
   mkdir /var/apache2/log
 fi
-
-cp $SNAP/etc/ports.conf /var/apache2/etc
-cp $SNAP/etc/000-default.conf /var/apache2/etc
-
-sed -i "s/LISTEN_PORT_HTTP/$HTTP_PORT/g" /var/apache2/etc/ports.conf
-sed -i "s/LISTEN_PORT_HTTP/$HTTP_PORT/g" /var/apache2/etc/000-default.conf
 
 $SNAP/usr/sbin/apache2 -k start
