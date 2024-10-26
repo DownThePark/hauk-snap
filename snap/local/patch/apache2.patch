@@ -1,0 +1,69 @@
+diff -crB etc/apache2/envvars apache2.modified/envvars
+*** etc/apache2/envvars	2024-10-26 07:51:14.076102563 -0400
+--- apache2.modified/envvars	2024-10-26 07:53:16.042314438 -0400
+***************
+*** 13,26 ****
+  # Since there is no sane way to get the parsed apache2 config in scripts, some
+  # settings are defined via environment variables and then used in apache2ctl,
+  # /etc/init.d/apache2, /etc/logrotate.d/apache2, etc.
+! export APACHE_RUN_USER=www-data
+! export APACHE_RUN_GROUP=www-data
+  # temporary state file location. This might be changed to /run in Wheezy+1
+! export APACHE_PID_FILE=/var/run/apache2$SUFFIX/apache2.pid
+! export APACHE_RUN_DIR=/var/run/apache2$SUFFIX
+! export APACHE_LOCK_DIR=/var/lock/apache2$SUFFIX
+  # Only /var/log/apache2 is handled by /etc/logrotate.d/apache2.
+! export APACHE_LOG_DIR=/var/log/apache2$SUFFIX
+  
+  ## The locale used by some modules like mod_dav
+  export LANG=C
+--- 13,26 ----
+  # Since there is no sane way to get the parsed apache2 config in scripts, some
+  # settings are defined via environment variables and then used in apache2ctl,
+  # /etc/init.d/apache2, /etc/logrotate.d/apache2, etc.
+! export APACHE_RUN_USER=snap_daemon
+! export APACHE_RUN_GROUP=snap_daemon
+  # temporary state file location. This might be changed to /run in Wheezy+1
+! export APACHE_PID_FILE=/var/apache2/run/apache2.pid
+! export APACHE_RUN_DIR=/var/apache2/run
+! export APACHE_LOCK_DIR=/var/apache2/lock
+  # Only /var/log/apache2 is handled by /etc/logrotate.d/apache2.
+! export APACHE_LOG_DIR=/var/apache2/log
+  
+  ## The locale used by some modules like mod_dav
+  export LANG=C
+diff -crB etc/apache2/ports.conf apache2.modified/ports.conf
+*** etc/apache2/ports.conf	2024-10-26 07:51:14.076102563 -0400
+--- apache2.modified/ports.conf	2024-10-26 07:51:25.599838378 -0400
+***************
+*** 2,8 ****
+  # have to change the VirtualHost statement in
+  # /etc/apache2/sites-enabled/000-default.conf
+  
+! Listen 80
+  
+  <IfModule ssl_module>
+  	Listen 443
+--- 2,8 ----
+  # have to change the VirtualHost statement in
+  # /etc/apache2/sites-enabled/000-default.conf
+  
+! Listen ${HTTP_PORT}
+  
+  <IfModule ssl_module>
+  	Listen 443
+diff -crB etc/apache2/sites-available/000-default.conf apache2.modified/sites-available/000-default.conf
+*** etc/apache2/sites-available/000-default.conf	2024-10-26 07:51:14.077102540 -0400
+--- apache2.modified/sites-available/000-default.conf	2024-10-26 07:51:48.936303888 -0400
+***************
+*** 1,4 ****
+! <VirtualHost *:80>
+  	# The ServerName directive sets the request scheme, hostname and port that
+  	# the server uses to identify itself. This is used when creating
+  	# redirection URLs. In the context of virtual hosts, the ServerName
+--- 1,4 ----
+! <VirtualHost *:${HTTP_PORT}>
+  	# The ServerName directive sets the request scheme, hostname and port that
+  	# the server uses to identify itself. This is used when creating
+  	# redirection URLs. In the context of virtual hosts, the ServerName
+Only in apache2.modified/sites-enabled: 000-default.conf
