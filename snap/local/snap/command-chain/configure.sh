@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configured value(s)
-HTTP_PORT="$(snapctl get server.ports.http)"
+HTTP_PORT="$(snapctl get ports.http)"
 
 configure_apache2() {
   # Check if HTTP port value is valid or not
@@ -15,7 +15,7 @@ configure_apache2() {
     exit 1
   fi
 
-  snapctl set server.ports.http=$HTTP_PORT
+  snapctl set ports.http=$HTTP_PORT
   snapctl restart hauk.apache2
 }
 

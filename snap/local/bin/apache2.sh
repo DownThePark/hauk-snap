@@ -6,7 +6,7 @@ export APACHE_RUN_DIR=/var/apache2/run
 export APACHE_LOCK_DIR=/var/apache2/lock
 export APACHE_LOG_DIR=/var/apache2/log
 export APACHE_PID_FILE=/var/apache2/run/apache2.pid
-export HTTP_PORT="$(snapctl get server.ports.http)"
+export HTTP_PORT="$(snapctl get ports.http)"
 
 display_help() {
    echo "Usage: $(basename "$0") [-h] [-s start|stop|reload|restart]"
@@ -17,11 +17,6 @@ display_help() {
 }
 
 apache2_start() {
-  if [ -z "$HTTP_PORT" ] ; then
-    snapctl set server.ports.http=8000
-    export HTTP_PORT="$(snapctl get server.ports.http)"
-  fi
-
   if [ ! -d /var/apache2 ] ; then
     mkdir /var/apache2
   fi
