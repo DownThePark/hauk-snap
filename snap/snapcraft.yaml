@@ -30,12 +30,12 @@ layout:
     symlink: $SNAP/html
 
 hooks:
-  install:
-    command-chain:
-      - snap/command-chain/install.sh
   configure:
     command-chain:
       - snap/command-chain/configure.sh
+  install:
+    command-chain:
+      - snap/command-chain/install.sh
 
 apps:
   apache2:
@@ -51,6 +51,7 @@ apps:
 
 parts:
   server:
+    after: [local]
     plugin: nil
     build-packages:
       - apache2
@@ -67,9 +68,10 @@ parts:
       - memcached
     override-prime: |
       craftctl default
-      cp -a /etc/apache2/. etc/apache2/
-      cp -a /etc/php/. etc/php/
+      bin/configure-apache2.sh
+      bin/configure-php.sh
   html:
+    after: [local]
     plugin: nil
     build-packages:
       - wget
@@ -81,12 +83,10 @@ parts:
       cp -a Hauk-$SNAPCRAFT_PROJECT_VERSION/frontend/. html/
       cp -a Hauk-$SNAPCRAFT_PROJECT_VERSION/backend-php/. html/
       cp -r html/ $CRAFT_PART_INSTALL
-  local:
-    after: [server, html]
-    plugin: dump
-    source-type: local
-    source: snap/local
     override-prime: |
       craftctl default
       patch -Ns -p0 < patch/html.patch || true
-      patch -Ns -p0 < patch/apache2.patch || true
+  local:
+    plugin: dump
+    source-type: local
+    source: snap/local
