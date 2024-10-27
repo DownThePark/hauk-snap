@@ -6,35 +6,74 @@ export APACHE_RUN_DIR=/var/apache2/run
 export APACHE_LOCK_DIR=/var/apache2/lock
 export APACHE_LOG_DIR=/var/apache2/log
 export APACHE_PID_FILE=/var/apache2/run/apache2.pid
+export HTTP_PORT="$(snapctl get server.ports.http)"
 
-source $SNAP_DATA/etc/server.conf
+display_help() {
+   echo "Usage: $(basename "$0") [-h] [-s start|stop|reload|restart]"
+   echo
+   echo "Options:"
+   echo "  -h        : Prints this help message"
+   echo "  -s action : Service control"
+}
 
-if [ -z "$HTTP_PORT" ] ; then
-  echo "Error: The HTTP_PORT value seems to be missing in $SNAP_DATA/etc/server.conf" >&2
-  exit 1
+apache2_start() {
+  if [ -z "$HTTP_PORT" ] ; then
+    snapctl set server.ports.http=8000
+    export HTTP_PORT="$(snapctl get server.ports.http)"
+  fi
+
+  if [ ! -d /var/apache2 ] ; then
+    mkdir /var/apache2
+  fi
+
+  if [ ! -d /var/apache2/run ] ; then
+    mkdir /var/apache2/run
+  fi
+
+  if [ ! -d /var/apache2/lock ] ; then
+    mkdir /var/apache2/lock
+  fi
+
+  if [ ! -d /var/apache2/log ] ; then
+    mkdir /var/apache2/log
+  fi
+
+  $SNAP/usr/sbin/apache2 -k start
+}
+
+apache2_stop() {
+  $SNAP/usr/sbin/apache2 -k stop
+}
+
+apache2_reload() {
+  $SNAP/usr/sbin/apache2 -k graceful
+}
+
+apache2_restart() {
+  $SNAP/usr/sbin/apache2 -k restart
+}
+
+no_args="true"
+while getopts ":hs:" option; do
+   case $option in
+      h) display_help
+         exit;;
+      s) if [ $OPTARG == 'start' ] ; then
+           apache2_start
+         elif [ $OPTARG == 'stop' ] ; then
+           apache2_stop
+         elif [ $OPTARG == 'reload' ] ; then
+           apache2_reload
+         elif [ $OPTARG == 'restart' ] ; then
+           apache2_restart
+         fi
+         ;;
+     \?) echo "Error: Invalid option"
+         exit;;
+   esac
+   no_args="false"
+done
+
+if [[ "$no_args" == "true" ]] ; then
+  display_help
 fi
-
-if ! expr "$HTTP_PORT" : '^[0-9]\+$' > /dev/null ; then
-  echo "Error: \"$HTTP_PORT\" is not a valid HTTP port" >&2
-  exit 1
-fi
-
-export HTTP_PORT=$HTTP_PORT
-
-if [ ! -d /var/apache2 ] ; then
-  mkdir /var/apache2
-fi
-
-if [ ! -d /var/apache2/run ] ; then
-  mkdir /var/apache2/run
-fi
-
-if [ ! -d /var/apache2/lock ] ; then
-  mkdir /var/apache2/lock
-fi
-
-if [ ! -d /var/apache2/log ] ; then
-  mkdir /var/apache2/log
-fi
-
-$SNAP/usr/sbin/apache2 -k start

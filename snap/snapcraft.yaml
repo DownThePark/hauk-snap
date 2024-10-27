@@ -30,10 +30,15 @@ hooks:
   install:
     command-chain:
       - snap/command-chain/install.sh
+  configure:
+    command-chain:
+      - snap/command-chain/configure.sh
 
 apps:
   apache2:
-    command: bin/apache2.sh
+    command: bin/apache2.sh -s start
+    reload-command: bin/apache2.sh -s reload
+    stop-command: bin/apache2.sh -s stop
     daemon: forking
     plugs: [network, network-bind]
   memcached:
