@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copy apache configuration from build (these have most mods automatically enabled)
+# Copy apache configuration from build-packages step
 cp -a /etc/apache2/. etc/apache2/
 
 # ports.conf
@@ -23,12 +23,10 @@ pushd etc/apache2/sites-enabled
 ln -sf ../sites-available/default-ssl.conf .
 popd
 
-# ssl.conf
-sed -i "s#/usr/share/apache2/ask-for-passphrase#\$\{SNAP}/usr/share/apache2/ask-for-passphrase#g" etc/apache2/mods-available/ssl.conf
-
 # Mods
 pushd etc/apache2/mods-enabled
-ln -s ../mods-available/socache_shmcb.load .
-ln -s ../mods-available/ssl.conf .
-ln -s ../mods-available/ssl.load .
+ln -sf ../mods-available/socache_shmcb.load .
+ln -sf ../mods-available/ssl.conf .
+ln -sf ../mods-available/ssl.load .
 popd
+sed -i "s#/usr/share/apache2/ask-for-passphrase#\$\{SNAP}/usr/share/apache2/ask-for-passphrase#g" etc/apache2/mods-available/ssl.conf

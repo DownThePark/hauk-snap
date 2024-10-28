@@ -22,8 +22,6 @@ layout:
     symlink: $SNAP/usr/lib/php
   /usr/sbin/apache2:
     symlink: $SNAP/usr/sbin/apache2
-  /var/apache2:
-    type: tmpfs
   /var/hauk:
     symlink: $SNAP_DATA
   /var/www/html:

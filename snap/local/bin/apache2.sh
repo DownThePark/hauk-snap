@@ -2,10 +2,10 @@
 
 export APACHE_RUN_USER=snap_daemon
 export APACHE_RUN_GROUP=snap_daemon
-export APACHE_RUN_DIR=/var/apache2/run
-export APACHE_LOCK_DIR=/var/apache2/lock
-export APACHE_LOG_DIR=/var/apache2/log
-export APACHE_PID_FILE=/var/apache2/run/apache2.pid
+export APACHE_RUN_DIR=$SNAP_DATA/run
+export APACHE_LOCK_DIR=$SNAP_DATA/lock
+export APACHE_LOG_DIR=$SNAP_DATA/log
+export APACHE_PID_FILE=$SNAP_DATA/run/apache2.pid
 export HTTP_PORT="$(snapctl get ports.http)"
 export HTTPS_PORT="$(snapctl get ports.https)"
 export SSL_ENABLED="$(snapctl get ssl.enabled)"
@@ -23,22 +23,6 @@ display_help() {
 }
 
 apache2_start() {
-  if [ ! -d /var/apache2 ] ; then
-    mkdir /var/apache2
-  fi
-
-  if [ ! -d /var/apache2/run ] ; then
-    mkdir /var/apache2/run
-  fi
-
-  if [ ! -d /var/apache2/lock ] ; then
-    mkdir /var/apache2/lock
-  fi
-
-  if [ ! -d /var/apache2/log ] ; then
-    mkdir /var/apache2/log
-  fi
-
   if [[ $SSL_ENABLED == 'true' ]] ; then
     enable_https
   fi
@@ -55,7 +39,7 @@ apache2_stop() {
 }
 
 apache2_reload() {
-  $SNAP/usr/sbin/apache2 -k graceful
+  $SNAP/usr/sbin/apache2 -k graceful $SSL_FLAG
 }
 
 apache2_restart() {

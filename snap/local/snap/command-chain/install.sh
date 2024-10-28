@@ -13,18 +13,20 @@ initialize_snap_configuration() {
 
 # Initialize contents for $SNAP_DATA
 initialize_snap_data() {
-  # Configuration files
+  # Create folders
   mkdir $SNAP_DATA/etc
+  mkdir $SNAP_DATA/lock
+  mkdir $SNAP_DATA/log
+  mkdir $SNAP_DATA/run
+  mkdir $SNAP_DATA/ssl
+
+  # config.php
   cp $SNAP/html/include/config-sample.php $SNAP_DATA/etc/config.php
   sed -i "s#/etc/hauk#$(dirname $SNAP_DATA)/current/etc#g" $SNAP_DATA/etc/config.php
 
-  # Sockets
-  mkdir $SNAP_DATA/run
-
-  # Certificates
-  mkdir $SNAP_DATA/ssl
+  # Generate self-signed certificate
   openssl req -x509 -newkey rsa:4096 -keyout $SNAP_DATA/ssl/key.pem -out $SNAP_DATA/ssl/cert.pem -sha256 -days 3650 -nodes -subj "/C=US/ST=/L=/O=/OU=/CN=hauk.example.com"
-  chmod 700 $SNAP_DATA/ssl
+  chmod 600 $SNAP_DATA/ssl/key.pem
 }
 
 initialize_snap_configuration
