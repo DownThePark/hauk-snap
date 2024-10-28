@@ -39,10 +39,6 @@ apache2_start() {
     mkdir /var/apache2/log
   fi
 
-  if [ ! -d /var/apache2/live ] ; then
-    mkdir /var/apache2/live
-  fi
-
   if [[ $SSL_ENABLED == 'true' ]] ; then
     enable_https
   fi
@@ -51,7 +47,7 @@ apache2_start() {
     disable_https
   fi
 
-  $SNAP/usr/sbin/apache2 -k start
+  $SNAP/usr/sbin/apache2 -k start $SSL_FLAG
 }
 
 apache2_stop() {
@@ -63,25 +59,15 @@ apache2_reload() {
 }
 
 apache2_restart() {
-  $SNAP/usr/sbin/apache2 -k restart
+  $SNAP/usr/sbin/apache2 -k restart $SSL_FLAG
 }
 
 enable_https() {
-  if [ ! -f /var/apache2/live/default-ssl.conf ] ; then
-    cp $SNAP/etc/apache2/sites-available/default-ssl.conf /var/apache2/live
-    cp $SNAP/etc/apache2/mods-available/socache_shmcb.load /var/apache2/live
-    cp $SNAP/etc/apache2/mods-available/ssl.conf /var/apache2/live
-    cp $SNAP/etc/apache2/mods-available/ssl.load /var/apache2/live
-  fi
+  export SSL_FLAG="-D SSLEnabled"
 }
 
 disable_https() {
-  if [ -f /var/apache2/live/default-ssl.conf ] ; then
-    rm /var/apache2/live/default-ssl.conf
-    rm /var/apache2/live/socache_shmcb.load
-    rm /var/apache2/live/ssl.conf
-    rm /var/apache2/live/ssl.load
-  fi
+  export SSL_FLAG=""
 }
 
 no_args="true"
@@ -101,7 +87,7 @@ while getopts "hs:t:" option; do
            apache2_restart
          fi
          ;;
-      t) # Enable or disble HTTPS
+      t) # Enable or disable HTTPS
          if [[ $OPTARG == "enable" ]] ; then
            enable_https
          elif [[ $OPTARG == "disable" ]] ; then
