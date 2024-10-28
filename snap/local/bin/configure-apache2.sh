@@ -1,7 +1,11 @@
 #!/bin/bash
 
 # Copy apache configuration from build-packages step
-cp -a /etc/apache2/. etc/apache2/
+rm -r etc/apache2
+cp -r /etc/apache2 etc/
+
+# Delete default virtual host
+rm etc/apache2/sites-enabled/000-default.conf
 
 # ports.conf
 cat << 'EOF' > etc/apache2/ports.conf
@@ -12,15 +16,34 @@ Listen ${HTTP_PORT}
 </IfDefine>
 EOF
 
-# 000-default.conf
-sed -i "s#80#\$\{HTTP_PORT}#g" etc/apache2/sites-available/000-default.conf
+# hauk.conf
+cat << 'EOF' > etc/apache2/sites-available/hauk.conf
+<VirtualHost *:${HTTP_PORT}>
+    DocumentRoot /var/www/html
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+</VirtualHost>
 
-# ssl-default.conf
-sed -i "s#443#\$\{HTTPS_PORT}#g" etc/apache2/sites-available/default-ssl.conf
-sed -i "s#/etc/ssl/certs/ssl-cert-snakeoil.pem#\$\{SSL_CERT}#g" etc/apache2/sites-available/default-ssl.conf
-sed -i "s#/etc/ssl/private/ssl-cert-snakeoil.key#\$\{SSL_KEY}#g" etc/apache2/sites-available/default-ssl.conf
+<VirtualHost *:${HTTPS_PORT}>
+    DocumentRoot /var/www/html
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+
+    SSLEngine on
+    SSLCertificateFile      ${SSL_CERT}
+    SSLCertificateKeyFile   ${SSL_KEY}
+
+    <FilesMatch "\.(?:cgi|shtml|phtml|php)$">
+        SSLOptions +StdEnvVars
+    </FilesMatch>
+    <Directory /usr/lib/cgi-bin>
+        SSLOptions +StdEnvVars
+    </Directory>
+</VirtualHost>
+EOF
+
 pushd etc/apache2/sites-enabled
-ln -sf ../sites-available/default-ssl.conf .
+ln -sf ../sites-available/hauk.conf .
 popd
 
 # Mods
