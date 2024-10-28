@@ -59,27 +59,4 @@ configure_apache2() {
   snapctl restart hauk.apache2
 }
 
-add_missing_values() {
-  if [ -z "$HTTP_PORT"] ; then
-    snapctl set ports.http=$DEFAULT_HTTP_PORT
-  fi
-
-  if [ -z "$HTTPS_PORT"] ; then
-    snapctl set ports.https=$DEFAULT_HTTPS_PORT
-  fi
-
-  if [ -z "$SSL_ENABLED"] ; then
-    snapctl set ssl.enabled=$DEFAULT_SSL_ENABLED
-  fi
-
-  if [ -z "$SSL_CERT"] ; then
-    snapctl set ssl.cert=$DEFAULT_SSL_CERT
-  fi
-
-  if [ -z "$SSL_KEY"] ; then
-    snapctl set ssl.key=$DEFAULT_SSL_KEY
-  fi
-}
-
 configure_apache2
-add_missing_values
