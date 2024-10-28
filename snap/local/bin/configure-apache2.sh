@@ -20,14 +20,10 @@ EOF
 cat << 'EOF' > etc/apache2/sites-available/hauk.conf
 <VirtualHost *:${HTTP_PORT}>
     DocumentRoot /var/www/html
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
-    ErrorLog ${APACHE_LOG_DIR}/error.log
 </VirtualHost>
 
 <VirtualHost *:${HTTPS_PORT}>
     DocumentRoot /var/www/html
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
-    ErrorLog ${APACHE_LOG_DIR}/error.log
 
     SSLEngine on
     SSLCertificateFile      ${SSL_CERT}
@@ -53,3 +49,7 @@ ln -sf ../mods-available/ssl.conf .
 ln -sf ../mods-available/ssl.load .
 popd
 sed -i "s#/usr/share/apache2/ask-for-passphrase#\$\{SNAP}/usr/share/apache2/ask-for-passphrase#g" etc/apache2/mods-available/ssl.conf
+
+# Disable logging
+sed '/{APACHE_LOG_DIR}\/\error.log/d' etc/apache2/apache2.conf
+echo "ErrorLog /dev/null" >> etc/apache2/apache2.conf

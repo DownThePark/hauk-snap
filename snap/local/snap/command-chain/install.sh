@@ -15,8 +15,6 @@ initialize_snap_configuration() {
 initialize_snap_data() {
   # Create folders
   mkdir $SNAP_DATA/etc
-  mkdir $SNAP_DATA/lock
-  mkdir $SNAP_DATA/log
   mkdir $SNAP_DATA/run
   mkdir $SNAP_DATA/ssl
 
