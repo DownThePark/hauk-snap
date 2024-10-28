@@ -68,6 +68,7 @@ parts:
       craftctl default
       bin/configure-apache2.sh
       bin/configure-php.sh
+      bin/cleanup.sh
   html:
     after: [local]
     plugin: nil
