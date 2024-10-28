@@ -7,13 +7,19 @@ export APACHE_LOCK_DIR=/var/apache2/lock
 export APACHE_LOG_DIR=/var/apache2/log
 export APACHE_PID_FILE=/var/apache2/run/apache2.pid
 export HTTP_PORT="$(snapctl get ports.http)"
+export HTTPS_PORT="$(snapctl get ports.https)"
+export SSL_ENABLED="$(snapctl get ssl.enabled)"
+export SSL_CERT="$(snapctl get ssl.cert)"
+export SSL_KEY="$(snapctl get ssl.key)"
 
 display_help() {
    echo "Usage: $(basename "$0") [-h] [-s start|stop|reload|restart]"
+   echo "                             [-t enable|disable]"
    echo
    echo "Options:"
    echo "  -h        : Prints this help message"
    echo "  -s action : Service control"
+   echo "  -t action : Enable or disable HTTPS"
 }
 
 apache2_start() {
@@ -33,6 +39,18 @@ apache2_start() {
     mkdir /var/apache2/log
   fi
 
+  if [ ! -d /var/apache2/live ] ; then
+    mkdir /var/apache2/live
+  fi
+
+  if [[ $SSL_ENABLED == 'true' ]] ; then
+    enable_https
+  fi
+
+  if [[ $SSL_ENABLED == 'false' ]] ; then
+    disable_https
+  fi
+
   $SNAP/usr/sbin/apache2 -k start
 }
 
@@ -48,22 +66,50 @@ apache2_restart() {
   $SNAP/usr/sbin/apache2 -k restart
 }
 
+enable_https() {
+  if [ ! -f /var/apache2/live/default-ssl.conf ] ; then
+    cp $SNAP/etc/apache2/sites-available/default-ssl.conf /var/apache2/live
+    cp $SNAP/etc/apache2/mods-available/socache_shmcb.load /var/apache2/live
+    cp $SNAP/etc/apache2/mods-available/ssl.conf /var/apache2/live
+    cp $SNAP/etc/apache2/mods-available/ssl.load /var/apache2/live
+  fi
+}
+
+disable_https() {
+  if [ -f /var/apache2/live/default-ssl.conf ] ; then
+    rm /var/apache2/live/default-ssl.conf
+    rm /var/apache2/live/socache_shmcb.load
+    rm /var/apache2/live/ssl.conf
+    rm /var/apache2/live/ssl.load
+  fi
+}
+
 no_args="true"
-while getopts ":hs:" option; do
+while getopts "hs:t:" option; do
    case $option in
-      h) display_help
+      h) # Display help
+         display_help
          exit;;
-      s) if [ $OPTARG == 'start' ] ; then
+      s) # Service control
+         if [[ $OPTARG == "start" ]] ; then
            apache2_start
-         elif [ $OPTARG == 'stop' ] ; then
+         elif [[ $OPTARG == "stop" ]] ; then
            apache2_stop
-         elif [ $OPTARG == 'reload' ] ; then
+         elif [[ $OPTARG == "reload" ]] ; then
            apache2_reload
-         elif [ $OPTARG == 'restart' ] ; then
+         elif [[ $OPTARG == "restart" ]] ; then
            apache2_restart
          fi
          ;;
-     \?) echo "Error: Invalid option"
+      t) # Enable or disble HTTPS
+         if [[ $OPTARG == "enable" ]] ; then
+           enable_https
+         elif [[ $OPTARG == "disable" ]] ; then
+           disable_https
+         fi
+         ;;
+     \?) # Display error
+         echo "Error: Invalid option"
          exit;;
    esac
    no_args="false"
