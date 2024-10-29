@@ -33,17 +33,6 @@ configure_apache2() {
     exit 1
   fi
 
-  # Check if certificate paths are valid
-  if [[ ! -f $SSL_CERT ]] ; then
-    echo "Error: \"$SSL_CERT\" is an invalid path."
-    exit 1
-  fi
-
-  if [[ ! -f $SSL_KEY ]] ; then
-    echo "Error: \"$SSL_KEY\" is an invalid path."
-    exit 1
-  fi
-
   snapctl set ports.http=$HTTP_PORT
   snapctl set ports.https=$HTTPS_PORT
   snapctl set ssl.enabled=$SSL_ENABLED
