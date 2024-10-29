@@ -26,6 +26,8 @@ layout:
     symlink: $SNAP_DATA
   /var/www/html:
     symlink: $SNAP/html
+  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/sasl2:
+    symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/sasl2
 
 hooks:
   configure:
