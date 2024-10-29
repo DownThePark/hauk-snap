@@ -86,7 +86,7 @@ parts:
       cp -r html/ $CRAFT_PART_INSTALL
     override-prime: |
       craftctl default
-      patch -Ns -p0 < patch/html.patch || true
+      patch -Ns -p0 < patch/html.patch
   local:
     plugin: dump
     source-type: local
