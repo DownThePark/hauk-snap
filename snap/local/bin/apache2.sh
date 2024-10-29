@@ -1,16 +1,13 @@
 #!/bin/bash
 
+source $SNAP/bin/get-snap-configuration.sh
+
 export APACHE_RUN_USER=snap_daemon
 export APACHE_RUN_GROUP=snap_daemon
-export APACHE_RUN_DIR=/tmp/apache2/run
 export APACHE_LOCK_DIR=/tmp/apache2/lock
 export APACHE_LOG_DIR=/tmp/apache2/log
+export APACHE_RUN_DIR=/tmp/apache2/run
 export APACHE_PID_FILE=/tmp/apache2/run/apache2.pid
-export HTTP_PORT="$(snapctl get ports.http)"
-export HTTPS_PORT="$(snapctl get ports.https)"
-export SSL_ENABLED="$(snapctl get ssl.enabled)"
-export SSL_CERT="$(snapctl get ssl.cert)"
-export SSL_KEY="$(snapctl get ssl.key)"
 
 display_help() {
    echo "Usage: $(basename "$0") [-h] [-s start|stop|reload|restart]"

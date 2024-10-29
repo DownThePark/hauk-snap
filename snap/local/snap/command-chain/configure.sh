@@ -1,13 +1,6 @@
 #!/bin/bash
 
-source $SNAP/etc/defaults
-
-# Configured value(s)
-HTTP_PORT="$(snapctl get ports.http)"
-HTTPS_PORT="$(snapctl get ports.https)"
-SSL_ENABLED="$(snapctl get ssl.enabled)"
-SSL_CERT="$(snapctl get ssl.cert)"
-SSL_KEY="$(snapctl get ssl.key)"
+source $SNAP/bin/get-snap-configuration.sh
 
 configure_apache2() {
   # Check if HTTP port value is valid or not
