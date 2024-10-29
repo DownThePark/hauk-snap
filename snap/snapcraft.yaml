@@ -14,6 +14,8 @@ platforms:
 layout:
   /etc/apache2:
     symlink: $SNAP/etc/apache2
+  /etc/hauk:
+    symlink: $SNAP_DATA/etc
   /etc/php:
     symlink: $SNAP/etc/php
   /usr/lib/apache2:
@@ -22,8 +24,6 @@ layout:
     symlink: $SNAP/usr/lib/php
   /usr/sbin/apache2:
     symlink: $SNAP/usr/sbin/apache2
-  /var/hauk:
-    symlink: $SNAP_DATA
   /var/www/html:
     symlink: $SNAP/html
   /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/sasl2:
