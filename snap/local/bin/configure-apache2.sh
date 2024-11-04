@@ -18,12 +18,16 @@ EOF
 
 # hauk.conf
 cat << 'EOF' > etc/apache2/sites-available/hauk.conf
+<Directory ${HTML}>
+    Require all granted
+</Directory>
+
 <VirtualHost *:${HTTP_PORT}>
-    DocumentRoot /var/www/html
+    DocumentRoot ${HTML}
 </VirtualHost>
 
 <VirtualHost *:${HTTPS_PORT}>
-    DocumentRoot /var/www/html
+    DocumentRoot ${HTML}
 
     SSLEngine on
     SSLCertificateFile      ${SSL_CERT}

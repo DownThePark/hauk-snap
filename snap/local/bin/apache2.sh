@@ -8,6 +8,7 @@ export APACHE_LOCK_DIR=/tmp/apache2/lock
 export APACHE_LOG_DIR=/tmp/apache2/log
 export APACHE_RUN_DIR=/tmp/apache2/run
 export APACHE_PID_FILE=/tmp/apache2/run/apache2.pid
+export HTML="$SNAP/html"
 
 display_help() {
    echo "Usage: $(basename "$0") [-h] [-s start|stop|reload|restart]"
