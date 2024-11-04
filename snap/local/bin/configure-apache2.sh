@@ -4,23 +4,35 @@
 rm -r etc/apache2
 cp -r /etc/apache2 etc/
 
-# Delete default virtual host
-rm etc/apache2/sites-enabled/000-default.conf
+# Custom apache2.conf
+cat << 'EOF' > etc/apache2/apache2.conf
+ServerName localhost
+HostnameLookups Off
+KeepAlive On
+Timeout 300
+MaxKeepAliveRequests 100
+KeepAliveTimeout 5
+ErrorLog /dev/null
+DefaultRuntimeDir ${APACHE_RUN_DIR}
+PidFile ${APACHE_PID_FILE}
 
-# ports.conf
-cat << 'EOF' > etc/apache2/ports.conf
 Listen ${HTTP_PORT}
-
 <IfDefine SSLEnabled>
-  Listen ${HTTPS_PORT}
+    Listen ${HTTPS_PORT}
 </IfDefine>
-EOF
 
-# hauk.conf
-cat << 'EOF' > etc/apache2/sites-available/hauk.conf
+<Directory />
+    Require all denied
+</Directory>
+
 <Directory ${HTML}>
     Require all granted
 </Directory>
+
+AccessFileName .htaccess
+<FilesMatch "^\.ht">
+    Require all denied
+</FilesMatch>
 
 <VirtualHost *:${HTTP_PORT}>
     DocumentRoot ${HTML}
@@ -36,25 +48,17 @@ cat << 'EOF' > etc/apache2/sites-available/hauk.conf
     <FilesMatch "\.(?:cgi|shtml|phtml|php)$">
         SSLOptions +StdEnvVars
     </FilesMatch>
-    <Directory /usr/lib/cgi-bin>
-        SSLOptions +StdEnvVars
-    </Directory>
 </VirtualHost>
+
+IncludeOptional conf-enabled/*.conf
+IncludeOptional mods-enabled/*.conf
+IncludeOptional mods-enabled/*.load
 EOF
 
-pushd etc/apache2/sites-enabled
-ln -sf ../sites-available/hauk.conf .
-popd
-
-# Mods
+# Enable SSL mod
 pushd etc/apache2/mods-enabled
 ln -sf ../mods-available/socache_shmcb.load .
 ln -sf ../mods-available/ssl.conf .
 ln -sf ../mods-available/ssl.load .
 popd
 sed -i "s#/usr/share/apache2/ask-for-passphrase#\$\{SNAP}/usr/share/apache2/ask-for-passphrase#g" etc/apache2/mods-available/ssl.conf
-
-# apache2.conf
-sed '/{APACHE_LOG_DIR}\/\error.log/d' etc/apache2/apache2.conf
-echo "ErrorLog /dev/null" >> etc/apache2/apache2.conf
-echo "ServerName localhost" >> etc/apache2/apache2.conf
