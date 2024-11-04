@@ -68,7 +68,6 @@ disable_https() {
   export SSL_FLAG=""
 }
 
-no_args="true"
 while getopts "hs:t:" option; do
    case $option in
       h) # Display help
@@ -96,9 +95,4 @@ while getopts "hs:t:" option; do
          echo "Error: Invalid option"
          exit;;
    esac
-   no_args="false"
 done
-
-if [[ "$no_args" == "true" ]] ; then
-  display_help
-fi
