@@ -48,6 +48,10 @@ apps:
     plugs: [network, network-bind]
 
 parts:
+  local:
+    plugin: dump
+    source-type: local
+    source: snap/local
   server:
     after: [local]
     plugin: nil
@@ -66,9 +70,8 @@ parts:
       - memcached
     override-prime: |
       craftctl default
-      bin/configure-apache2.sh
-      bin/configure-php.sh
-      bin/cleanup.sh
+      build/configure-apache2.sh
+      build/configure-php.sh
   html:
     after: [local]
     plugin: nil
@@ -84,8 +87,10 @@ parts:
       cp -r html/ $CRAFT_PART_INSTALL
     override-prime: |
       craftctl default
-      patch -Ns -p0 < patch/html.patch
-  local:
-    plugin: dump
-    source-type: local
-    source: snap/local
+      patch -Ns -p0 < build/html.patch
+  cleanup:
+    after: [local, server, html]
+    plugin: nil
+    override-prime: |
+      build/cleanup.sh
+      rm -r build/
