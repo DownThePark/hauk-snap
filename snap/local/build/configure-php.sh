@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Copy PHP configuration from build-packages step
-rm -r etc/php
-cp -r /etc/php etc/
+cp -a /etc/php/. etc/php/
 
-# Enable various PHP mods
+rm etc/php/8.3/apache2/conf.d/*
+rm etc/php/8.3/cli/conf.d/*
+
 pushd etc/php/8.3/apache2/conf.d/
 ln -s ../../mods-available/opcache.ini 10-opcache.ini
 ln -s ../../mods-available/pdo.ini 10-pdo.ini
