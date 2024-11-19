@@ -68,6 +68,17 @@ parts:
       - php8.3-memcached
       - php8.3-ldap
       - memcached
+    stage:
+      - etc/apache2/
+      - etc/php/
+      - usr/bin/memcached
+      - usr/bin/php8.3
+      - usr/lib/apache2/
+      - usr/lib/php/
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/sasl2/
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/*.so*
+      - usr/sbin/apache2
+      - usr/share/apache2/
     override-prime: |
       craftctl default
       build/configure-apache2.sh
@@ -88,9 +99,3 @@ parts:
     override-prime: |
       craftctl default
       patch -Ns -p0 < build/html.patch
-  cleanup:
-    after: [local, server, html]
-    plugin: nil
-    override-prime: |
-      build/cleanup.sh
-      rm -r build/
