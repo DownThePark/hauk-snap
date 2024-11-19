@@ -24,6 +24,8 @@ layout:
     symlink: $SNAP/usr/lib/php
   /usr/sbin/apache2:
     symlink: $SNAP/usr/sbin/apache2
+  /usr/share/apache2:
+    symlink: $SNAP/usr/share/apache2
   /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/sasl2:
     symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/sasl2
 

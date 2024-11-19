@@ -61,4 +61,3 @@ ln -sf ../mods-available/socache_shmcb.load .
 ln -sf ../mods-available/ssl.conf .
 ln -sf ../mods-available/ssl.load .
 popd
-sed -i "s#/usr/share/apache2/ask-for-passphrase#\$\{SNAP}/usr/share/apache2/ask-for-passphrase#g" etc/apache2/mods-available/ssl.conf
