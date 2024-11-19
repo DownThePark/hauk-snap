@@ -99,3 +99,8 @@ parts:
     override-prime: |
       craftctl default
       patch -Ns -p0 < build/html.patch
+  cleanup:
+    after: [local, server, hauk]
+    plugin: nil
+    override-prime: |
+      rm -r build/
