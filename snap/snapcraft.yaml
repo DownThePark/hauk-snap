@@ -48,6 +48,8 @@ apps:
     command: bin/memcached.sh
     daemon: simple
     plugs: [network, network-bind]
+  htpasswd:
+    command: usr/bin/htpasswd
 
 parts:
   local:
@@ -73,6 +75,7 @@ parts:
     stage:
       - etc/apache2/
       - etc/php/
+      - usr/bin/htpasswd
       - usr/bin/memcached
       - usr/bin/php8.3
       - usr/lib/apache2/
