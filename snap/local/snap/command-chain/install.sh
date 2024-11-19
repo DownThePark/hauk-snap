@@ -22,7 +22,7 @@ initialize_snap_data() {
   sed -i "s#/etc/hauk#$(dirname $SNAP_DATA)/current/etc#g" $SNAP_DATA/etc/config.php
 
   # Generate self-signed certificate
-  openssl req -x509 -newkey rsa:4096 -keyout $SNAP_DATA/ssl/key.pem -out $SNAP_DATA/ssl/cert.pem -sha256 -days 3650 -nodes -subj "/C=US/ST=/L=/O=/OU=/CN=hauk.example.com"
+  openssl req -x509 -newkey rsa:4096 -keyout $SNAP_DATA/ssl/key.pem -out $SNAP_DATA/ssl/cert.pem -sha256 -days 3650 -nodes -subj "/C=/ST=/L=/O=/OU=/CN=hauk.example.com"
   chmod 600 $SNAP_DATA/ssl/key.pem
 }
 
