@@ -1,6 +1,0 @@
-# Default value(s)
-export DEFAULT_HTTP_PORT=80
-export DEFAULT_HTTPS_PORT=443
-export DEFAULT_SSL_ENABLED="false"
-export DEFAULT_SSL_CERT="$(dirname $SNAP_DATA)/current/ssl/cert.pem"
-export DEFAULT_SSL_KEY="$(dirname $SNAP_DATA)/current/ssl/key.pem"
