@@ -85,19 +85,17 @@ parts:
       craftctl default
       build/configure-apache2.sh
       build/configure-php.sh
-  html:
+  hauk:
     after: [local]
-    plugin: nil
-    build-packages:
-      - wget
-      - tar
+    plugin: dump
+    source: https://github.com/bilde2910/Hauk/archive/refs/tags/v$SNAPCRAFT_PROJECT_VERSION.tar.gz
     override-build: |
-      wget https://github.com/bilde2910/Hauk/archive/refs/tags/v$SNAPCRAFT_PROJECT_VERSION.tar.gz
-      tar -xf v$SNAPCRAFT_PROJECT_VERSION.tar.gz
       mkdir html
-      cp -a Hauk-$SNAPCRAFT_PROJECT_VERSION/frontend/. html/
-      cp -a Hauk-$SNAPCRAFT_PROJECT_VERSION/backend-php/. html/
-      cp -r html/ $CRAFT_PART_INSTALL
+      cp -a frontend/. html/
+      cp -a backend-php/. html/
+      craftctl default
+    stage:
+      - html/
     override-prime: |
       craftctl default
       patch -Ns -p0 < build/html.patch
