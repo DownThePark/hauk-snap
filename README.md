@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This is a snap for [Hauk](https://github.com/bilde2910/Hauk), a fully open source, self-hosted location sharing service. It comes packaged with Apache2, PHP and memcached, all configured to work nicely together, allowing you to easily deploy and run a self-hosted Hauk instance.
+This is a snap for [Hauk](https://github.com/bilde2910/Hauk), a fully open source, self-hosted location sharing service. It comes packaged with Apache2, PHP and memcached, all configured to work perfectly together, allowing you to easily deploy and run a self-hosted Hauk instance.
 
 ## Installation
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/hauk)
@@ -19,7 +19,7 @@ The configuration file for Hauk is available at: `/var/snap/hauk/current/etc/con
 
 #### Available snap configurations
 
-This snap uses snapd's built in configuration utility, allowing you to easily modify the configuration of the web server.
+This snap takes advantage of `snap set` commands, allowing you to easily modify the configuration of the web server.
 
 To set the HTTP port (default: `80`)
 ```
