@@ -57,7 +57,7 @@ EOF
 
 # Enable SSL mod
 pushd etc/apache2/mods-enabled
-ln -sf ../mods-available/socache_shmcb.load .
-ln -sf ../mods-available/ssl.conf .
-ln -sf ../mods-available/ssl.load .
+ln -s ../mods-available/socache_shmcb.load .
+ln -s ../mods-available/ssl.conf .
+ln -s ../mods-available/ssl.load .
 popd
