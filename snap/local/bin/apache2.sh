@@ -23,18 +23,9 @@ display_help() {
 service_start() {
   if [ ! -d /tmp/apache2 ] ; then
     mkdir /tmp/apache2
-  fi
-
-  if [ ! -d /tmp/apache2/run ] ; then
-    mkdir /tmp/apache2/run
-  fi
-
-  if [ ! -d /tmp/apache2/lock ] ; then
-    mkdir /tmp/apache2/lock
-  fi
-
-  if [ ! -d /tmp/apache2/log ] ; then
-    mkdir /tmp/apache2/log
+    mkdir $APACHE_LOCK_DIR
+    mkdir $APACHE_LOG_DIR
+    mkdir $APACHE_RUN_DIR
   fi
 
   if [[ $SSL_ENABLED == 'true' ]] ; then
