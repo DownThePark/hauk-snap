@@ -21,14 +21,19 @@ The configuration file for Hauk is available at: `/var/snap/hauk/current/etc/con
 
 This snap takes advantage of `snap set` commands, allowing you to easily modify the configuration of the web server.
 
+To set the listening address (default: `0.0.0.0`)
+```
+sudo snap set hauk listen.address=<value>
+```
+
 To set the HTTP port (default: `80`)
 ```
-sudo snap set hauk ports.http=<value>
+sudo snap set hauk listen.http=<value>
 ```
 
 To set the HTTPS port (default: `443`)
 ```
-sudo snap set hauk ports.https=<value>
+sudo snap set hauk listen.https=<value>
 ```
 
 To enable or disable HTTPS support (default: `false`)
