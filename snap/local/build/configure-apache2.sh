@@ -16,9 +16,9 @@ ErrorLog /dev/null
 DefaultRuntimeDir ${APACHE_RUN_DIR}
 PidFile ${APACHE_PID_FILE}
 
-Listen ${HTTP_PORT}
+Listen ${LISTEN_ADDRESS}:${LISTEN_HTTP}
 <IfDefine SSLEnabled>
-    Listen ${HTTPS_PORT}
+    Listen ${LISTEN_ADDRESS}:${LISTEN_HTTPS}
 </IfDefine>
 
 <Directory />
@@ -34,11 +34,11 @@ AccessFileName .htaccess
     Require all denied
 </FilesMatch>
 
-<VirtualHost *:${HTTP_PORT}>
+<VirtualHost ${LISTEN_ADDRESS}:${LISTEN_HTTP}>
     DocumentRoot ${HTML}
 </VirtualHost>
 
-<VirtualHost *:${HTTPS_PORT}>
+<VirtualHost ${LISTEN_ADDRESS}:${LISTEN_HTTPS}>
     DocumentRoot ${HTML}
 
     SSLEngine on

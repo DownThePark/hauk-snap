@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source $SNAP/bin/get-snap-configuration.sh
+source $SNAP/bin/get-current-configuration.sh
 
 export APACHE_RUN_USER=snap_daemon
 export APACHE_RUN_GROUP=snap_daemon

@@ -1,12 +1,15 @@
 #!/bin/bash
 
+source $SNAP/bin/get-default-configuration.sh
+
 # Set default configuration values for this snap
 initialize_snap_configuration() {
-  snapctl set ports.http="80"
-  snapctl set ports.https="443"
-  snapctl set ssl.enabled="false"
-  snapctl set ssl.cert="$(dirname $SNAP_DATA)/current/ssl/cert.pem"
-  snapctl set ssl.key="$(dirname $SNAP_DATA)/current/ssl/key.pem"
+  snapctl set listen.address="$DEFAULT_LISTEN_ADDRESS"
+  snapctl set listen.http="$DEFAULT_LISTEN_HTTP"
+  snapctl set listen.https="$DEFAULT_LISTEN_HTTPS"
+  snapctl set ssl.enabled="$DEFAULT_SSL_ENABLED"
+  snapctl set ssl.cert="$DEFAULT_SSL_CERT"
+  snapctl set ssl.key="$DEFAULT_SSL_KEY"
 }
 
 # Initialize contents for $SNAP_DATA

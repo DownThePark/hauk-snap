@@ -36,6 +36,9 @@ hooks:
   install:
     command-chain:
       - snap/command-chain/install.sh
+  post-refresh:
+    command-chain:
+      - snap/command-chain/post-refresh.sh
 
 apps:
   apache2:
