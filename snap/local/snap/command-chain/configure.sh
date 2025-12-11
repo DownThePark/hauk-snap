@@ -38,8 +38,6 @@ configure_apache2() {
   snapctl set listen.http=$LISTEN_HTTP
   snapctl set listen.https=$LISTEN_HTTPS
   snapctl set ssl.enabled=$SSL_ENABLED
-  snapctl set ssl.cert=$SSL_CERT
-  snapctl set ssl.key=$SSL_KEY
   snapctl restart hauk.apache2
 }
 

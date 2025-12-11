@@ -8,8 +8,6 @@ initialize_snap_configuration() {
   snapctl set listen.http="$DEFAULT_LISTEN_HTTP"
   snapctl set listen.https="$DEFAULT_LISTEN_HTTPS"
   snapctl set ssl.enabled="$DEFAULT_SSL_ENABLED"
-  snapctl set ssl.cert="$DEFAULT_SSL_CERT"
-  snapctl set ssl.key="$DEFAULT_SSL_KEY"
 }
 
 # Initialize contents for $SNAP_DATA

@@ -17,33 +17,17 @@ add_missing_configurations() {
   if [ -z "$SSL_ENABLED" ] ; then
     snapctl set ssl.enabled="$DEFAULT_SSL_ENABLED"
   fi
-  if [ -z "$SSL_CERT" ] ; then
-    snapctl set ssl.cert="$DEFAULT_SSL_CERT"
-  fi
-  if [ -z "$SSL_KEY" ] ; then
-    snapctl set ssl.key="$DEFAULT_SSL_KEY"
-  fi
 }
 
-# Migrate old snap configurations to new format (if any)
-migrate_snap_configurations() {
-  # Get old configurations
-  local PORTS_HTTP="$(snapctl get ports.http)"
-  local PORTS_HTTPS="$(snapctl get ports.https)"
-
-  # Migrate to new format
-  if [ ! -z "$PORTS_HTTP" ] ; then
-    snapctl set listen.http="$PORTS_HTTP"
+# Remove outdated snap configurations (if any)
+remove_outdated_configurations() {
+  if [ ! -z "$(snapctl get ssl.cert)" ] ; then
+    snapctl unset ssl.cert
   fi
-
-  if [ ! -z "$PORTS_HTTPS" ] ; then
-    snapctl set listen.https="$PORTS_HTTPS"
+  if [ ! -z "$(snapctl get ssl.key)" ] ; then
+    snapctl unset ssl.key
   fi
-
-  # Remove old configurations
-  snapctl unset ports
-
 }
 
 add_missing_configurations
-migrate_snap_configurations
+remove_outdated_configurations

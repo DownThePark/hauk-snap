@@ -42,8 +42,8 @@ AccessFileName .htaccess
     DocumentRoot ${HTML}
 
     SSLEngine on
-    SSLCertificateFile      ${SSL_CERT}
-    SSLCertificateKeyFile   ${SSL_KEY}
+    SSLCertificateFile      "${SNAP_DATA}/ssl/cert.pem"
+    SSLCertificateKeyFile   "${SNAP_DATA}/ssl/key.pem"
 
     <FilesMatch "\.(?:cgi|shtml|phtml|php)$">
         SSLOptions +StdEnvVars
